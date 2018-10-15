@@ -1,6 +1,9 @@
 package com.tw.go.config.json;
 
 import com.google.gson.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import com.thoughtworks.go.plugin.api.GoApplicationAccessor;
 import com.thoughtworks.go.plugin.api.GoPlugin;
 import com.thoughtworks.go.plugin.api.GoPluginIdentifier;
@@ -61,9 +64,21 @@ public class JsonConfigPlugin implements GoPlugin {
         }
         if ("parse-directory".equals(request.requestName())) {
             return handleParseDirectoryRequest(request);
+        } else if ("pipeline-config-to-json".equals(request.requestName())) {
+            try {
+                return handlePipelineConfigToJson(request);
+            } catch (JSONException e) {
+                return renderJSON(500, String.format("Unable to convert Pipeline Config: %s", e.getMessage()));
+            }
         }
         throw new UnhandledRequestTypeException(request.requestName());
     }
+
+    private GoPluginApiResponse handlePipelineConfigToJson(GoPluginApiRequest request) throws JSONException {
+        JSONObject jsonObject = XML.toJSONObject(request.requestBody());
+        return DefaultGoPluginApiResponse.success(jsonObject.toString());
+    }
+
     private GoPluginApiResponse handleGetPluginSettingsView() throws IOException {
         Map<String, Object> response = new HashMap<String, Object>();
         response.put("template", IOUtils.toString(getClass().getResourceAsStream("/plugin-settings.template.html"), "UTF-8"));

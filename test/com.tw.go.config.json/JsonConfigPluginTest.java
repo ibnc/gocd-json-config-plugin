@@ -176,6 +176,30 @@ public class JsonConfigPluginTest {
     }
 
     @Test
+    public void shouldConvertPipelineConfigXMLtoJSON() throws UnhandledRequestTypeException
+    {
+        DefaultGoPluginApiRequest pipelineConfigToJsonRequest = new DefaultGoPluginApiRequest("configrepo","1.0","pipeline-config-to-json");
+        String requestBody = null;
+        pipelineConfigToJsonRequest.setRequestBody("<pipeline name=\"up42\"> <materials> <git url=\"test-repo\" /> </materials> <stage name=\"up42_stage\"> <jobs> <job name=\"up42_job\"> <tasks> <exec command=\"ls\" /> </tasks> </job> </jobs> </stage> </pipeline>");
+
+        String expected = "{" +
+                "\"pipeline\":{" +
+                    "\"stage\":" +
+                        "{" +
+                            "\"jobs\":" +
+                                "{\"job\":" +
+                                    "{\"name\":\"up42_job\",\"tasks\":{\"exec\":{\"command\":\"ls\"}}}}," +
+                            "\"name\":\"up42_stage\"" +
+                        "}," +
+                    "\"materials\":{\"git\":{\"url\":\"test-repo\"}},\"name\":\"up42\"}" +
+                "}";
+
+        GoPluginApiResponse response = plugin.handle(pipelineConfigToJsonRequest);
+        assertThat(response.responseBody(), is(expected));
+        assertThat(response.responseCode(), is(DefaultGoPluginApiResponse.SUCCESS_RESPONSE_CODE));
+    }
+
+    @Test
     public void shouldTalkToGoApplicationAccessorToGetPluginSettings() throws UnhandledRequestTypeException
     {
         DefaultGoPluginApiRequest parseDirectoryRequest = new DefaultGoPluginApiRequest("configrepo","1.0","parse-directory");

@@ -178,7 +178,7 @@ public class JsonConfigPluginTest {
     @Test
     public void shouldConvertPipelineConfigXMLtoJSON() throws UnhandledRequestTypeException
     {
-        DefaultGoPluginApiRequest pipelineConfigToJsonRequest = new DefaultGoPluginApiRequest("configrepo","1.0","pipeline-config-to-json");
+        DefaultGoPluginApiRequest pipelineConfigToJsonRequest = new DefaultGoPluginApiRequest("configrepo","1.0","pipeline-to-config");
         String requestBody = null;
         pipelineConfigToJsonRequest.setRequestBody("<pipeline name=\"up42\"> <materials> <git url=\"test-repo\" /> </materials> <stage name=\"up42_stage\"> <jobs> <job name=\"up42_job\"> <tasks> <exec command=\"ls\" /> </tasks> </job> </jobs> </stage> </pipeline>");
 

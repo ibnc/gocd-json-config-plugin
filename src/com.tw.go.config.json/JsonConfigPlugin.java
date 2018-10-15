@@ -64,7 +64,7 @@ public class JsonConfigPlugin implements GoPlugin {
         }
         if ("parse-directory".equals(request.requestName())) {
             return handleParseDirectoryRequest(request);
-        } else if ("pipeline-config-to-json".equals(request.requestName())) {
+        } else if ("pipeline-to-config".equals(request.requestName())) {
             try {
                 return handlePipelineConfigToJson(request);
             } catch (JSONException e) {
